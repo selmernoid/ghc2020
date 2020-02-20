@@ -33,11 +33,7 @@ namespace Task1
 
         static void Read()
         {
-            int[] ParseLine(string val) 
-            {
-                Console.WriteLine(val);
-                return val.Split(' ').Select(int.Parse).ToArray();
-            }
+            int[] ParseLine(string val) => val.Split(' ').Select(int.Parse).ToArray();
             using var reader = File.OpenText(fileName);
 
             int[] GetNextLine() => ParseLine(reader.ReadLine());
@@ -67,8 +63,6 @@ namespace Task1
                 //var currentBooksCount = infoLine[0];
                 librariesSignups[i] = infoLine[1];
                 librariesSpeed[i] = infoLine[2];
-
-               
             }
         }
         static void Output(object result) { }
