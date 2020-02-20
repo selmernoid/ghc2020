@@ -32,9 +32,50 @@ namespace Task1
 
             var result = GetAnswer();
             
+            result = GetAnswerB();
+
+
+            //var libraryAnswer = new LibraryAnswer
+            //     {
+            //         Id = lib.Key,
+            //         Books = new List<int>()
+            //     };
+            //for (int i = 0; i < books; i++)
+            //{
+            //    if (libBooks[lib.Key][i])
+            //        libraryAnswer.Books.Add(i);
+            //}
+
             result = GetAnswerD();
 
             Output(result);
+        }
+
+        private static Answer GetAnswerB()
+        {
+            IEnumerable<KeyValuePair<int, LibrariesCost>> temp = libraryCostsGlobal.Where(x => x.Key <= days);
+            var res = temp.FirstOrDefault(x => x.Value.Cost == temp.Max(y => y.Value.Cost));
+            return CreateAnswer(res.Value.libraryIds);
+        }
+
+        private static Answer CreateAnswer(List<int> libraryIds)
+        {
+
+            List<LibraryAnswer> libraryAnswers = new List<LibraryAnswer>();
+
+            foreach (var item in libraryIds)
+            {
+                new LibraryAnswer()
+                {
+                    Id = item,
+                    Books = books[]
+                }
+            }
+
+            return new Answer()
+            {
+                Libraries = libraryAnswers
+            };
         }
 
         static void Read(string[] args)
@@ -180,7 +221,7 @@ namespace Task1
                     {
                         Cost = libraryCostsGlobal[i].Cost + libraryCostCurrent.Cost,
                         Days = libraryCostsGlobal[i].Days + libraryCostCurrent.Days,
-                        libraryIds = libraryCostsGlobal[i].libraryIds.Union(libraryCostCurrent.libraryIds).ToList()
+                        Libraries = libraryCostsGlobal[i].Libraries.Union(libraryCostCurrent.Libraries, new ComparerLLibrary()).ToList()
                     };
                     if (libraryCostsGlobal.TryGetValue(librariesCostNew.Days, out LibrariesCost existLibraryCostSummarize))
                     {
@@ -192,6 +233,12 @@ namespace Task1
                 }
             }
         }
+
+        public class ComparerLLibrary : IEqualityComparer<Library>
+        {
+            public bool Equals(Library x, Library y)
+            {
+                return x.Id == y.Id;
     }
 
     public class L_V
@@ -219,8 +266,7 @@ namespace Task1
 
     public class LibrariesCost
     {
-        public List<int> libraryIds { get; set; }
-        public string Id { get { return string.Join(",", libraryIds); } }
+        public List<Library> Libraries { get; set; }
         public int Days { get; set; }
         public int Cost { get; set; }
 }
