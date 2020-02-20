@@ -9,10 +9,14 @@ using Common;
 
 namespace Task1
 {
-    
+
     class Program
     {
-        public  static int libraries, books;
+        //final Solution ... almost
+        public static Dictionary<int, LibrariesCost> libraryCostsGlobal = new Dictionary<int, LibrariesCost>();
+
+
+        public static int libraries, books;
         public static int[] booksCost;
         public static BitArray[] libBooks;
         public static int days;
@@ -27,7 +31,7 @@ namespace Task1
             Read(args);
 
             var result = GetAnswer();
-            
+
             result = GetAnswerD();
 
             Output(result);
@@ -45,20 +49,21 @@ namespace Task1
             using var reader = File.OpenText(fileName);
 
             int[] GetNextLine() => ParseLine(reader.ReadLine());
-            
+
             var firstLine = GetNextLine();
 
             books = firstLine[0];
             libraries = firstLine[1];
             days = firstLine[2];
             booksCost = GetNextLine();
-            
+
             //libraries = books = 100_000;;
             libBooks = new BitArray[libraries];
             librariesSpeed = new int[libraries];
             librariesSignups = new int[libraries];
 
-            for (int i = 0; i < libraries; i++) {
+            for (int i = 0; i < libraries; i++)
+            {
                 libBooks[i] = new BitArray(books, false);
                 var infoLine = GetNextLine();
                 var booksIds = GetNextLine();
@@ -141,19 +146,67 @@ namespace Task1
             }
             return result;
         }
+
+
+        public void AddToFinalLibrary(LibrariesCost libraryCostCurrent)
+        {
+            for (int i = 0; i < libraryCostsGlobal.Count; i++)
+            {
+                //from zero
+                if (libraryCostsGlobal.TryGetValue(libraryCostCurrent.Days, out LibrariesCost existLibraryCost))
+                {
+                    if (existLibraryCost.Cost < libraryCostCurrent.Cost)
+                        libraryCostsGlobal[libraryCostCurrent.Days] = libraryCostCurrent;
+                }
+                else //from anotherlibrary
+                {
+                    libraryCostsGlobal[libraryCostCurrent.Days] = libraryCostCurrent;
+                    LibrariesCost librariesCostNew = new LibrariesCost()
+                    {
+                        Cost = libraryCostsGlobal[i].Cost + libraryCostCurrent.Cost,
+                        Days = libraryCostsGlobal[i].Days + libraryCostCurrent.Days,
+                        libraryIds = libraryCostsGlobal[i].libraryIds.Union(libraryCostCurrent.libraryIds).ToList()
+                    };
+                    if (libraryCostsGlobal.TryGetValue(librariesCostNew.Days, out LibrariesCost existLibraryCostSummarize))
+                    {
+                        if (existLibraryCostSummarize.Cost < librariesCostNew.Cost)
+                            libraryCostsGlobal[librariesCostNew.Days] = librariesCostNew;
+                    }
+                    else
+                        libraryCostsGlobal[librariesCostNew.Days] = librariesCostNew;
+                }
+            }
+        }
     }
 
-
-    public static class Extensions {
+    public static class Extensions
+    {
         static unsafe int ConvertBoolUnsafe(bool t) => *(byte*)(&t);
 
-        public static int Sum(this BitArray bits) {
+        public static int Sum(this BitArray bits)
+        {
             var r = 0;
-            for (int i = 0; i < bits.Count; i++) {
+            for (int i = 0; i < bits.Count; i++)
+            {
                 r += ConvertBoolUnsafe(bits[i]);
             }
 
             return r;
         }
     }
+
+
+
+    public class LibrariesCost
+    {
+        public List<int> libraryIds { get; set; }
+        public string Id { get { return string.Join(",", libraryIds); } }
+        public int Days { get; set; }
+        public int Cost { get; set; }
+    }
+
+
+
+
+
 }
