@@ -11,7 +11,7 @@ namespace Task1
     
     class Program
     {
-        public  static int libraries, books, D;
+        public  static int libraries, books;
         public static int[] booksCost;
         public static BitArray[] libBooks;
         public static int days;
@@ -24,7 +24,10 @@ namespace Task1
         static void Main(string[] args)
         {
             fileName = args.Any() ? args[0] : "";
-            fileName = @"C:\Users\strunin\Desktop\a_example.txt";
+            if (!Path.IsPathFullyQualified(fileName))
+            {
+                fileName = Path.Combine(Environment.CurrentDirectory, fileName);
+            }
             Read();
 
             var result = GetAnswer();
@@ -67,6 +70,14 @@ namespace Task1
                 librariesSignups[i] = infoLine[1];
                 librariesSpeed[i] = infoLine[2];
             }
+            //foreach (var arr in libBooks)
+            //{
+            //    foreach (var bit in arr)
+            //    {
+            //        Console.Out.Write($"{bit} ");
+            //    }
+            //    Console.WriteLine();
+            //}
         }
         static void Output(Answer result) { }
 
@@ -80,7 +91,7 @@ namespace Task1
             {
                 Libraries = new List<LibraryAnswer>()
             };
-            int j = D;
+            int j = days;
             BitArray maskAlready = new BitArray(books, true);
             while (j > 0)
             {
