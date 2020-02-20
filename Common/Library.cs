@@ -10,8 +10,8 @@ namespace Common
         private int[] _daysDistribution;
         public Library(int id, int signUpDays, int booksPerDay, int[] books)
         {
-          
-            _daysDistribution = books.Select((value, index) => (value, index)).GroupBy((x) => x.index%)
+
+            //_daysDistribution = books.Select((value, index) => (value, index)).GroupBy((x) => x.index);
         }
         private long? _libraryValue;
 
