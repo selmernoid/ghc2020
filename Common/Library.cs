@@ -11,10 +11,5 @@ namespace Common
         public int BooksPerDay;
     }
 
-    public class Book
-    {
-        public int Id;
-        public int Score;
-    }
 
 }
