@@ -47,7 +47,8 @@ namespace Task1
             books = firstLine[0];
             libraries = firstLine[1];
             days = firstLine[2];
-
+            booksCost = GetNextLine();
+            
             //libraries = books = 100_000;;
             libBooks = new BitArray[libraries];
             librariesSpeed = new int[libraries];
@@ -55,18 +56,19 @@ namespace Task1
 
             for (int i = 0; i < libraries; i++) {
                 libBooks[i] = new BitArray(books, false);
-                var firstLibraryLine = GetNextLine();
-
-                //[0] is books count
-                //var currentBooksCount = firstLibraryLine[0];
-                librariesSignups[i] = firstLibraryLine[1];
-                librariesSpeed[i] = firstLibraryLine[2];
-
                 var booksIds = GetNextLine();
                 foreach (var bookId in booksIds)
                 {
                     libBooks[i][bookId] = true;
                 }
+                var infoLine = GetNextLine();
+
+                //[0] is books count
+                //var currentBooksCount = infoLine[0];
+                librariesSignups[i] = infoLine[1];
+                librariesSpeed[i] = infoLine[2];
+
+               
             }
         }
         static void Output(object result) { }
