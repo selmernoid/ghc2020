@@ -24,7 +24,7 @@ namespace Task1
 
         static void Main(string[] args)
         {
-            fileName = args.Any() ? args[0] : "";
+            fileName = args.Any() ? args[0] : "d_tough_choices.txt";
             if (!Path.IsPathFullyQualified(fileName))
             {
                 fileName = Path.Combine(Environment.CurrentDirectory, fileName);
@@ -59,12 +59,12 @@ namespace Task1
 
             for (int i = 0; i < libraries; i++) {
                 libBooks[i] = new BitArray(books, false);
+                var infoLine = GetNextLine();
                 var booksIds = GetNextLine();
                 foreach (var bookId in booksIds)
                 {
                     libBooks[i][bookId] = true;
                 }
-                var infoLine = GetNextLine();
 
                 //[0] is books count
                 //var currentBooksCount = infoLine[0];
@@ -89,6 +89,7 @@ namespace Task1
             {
                 sb.AppendLine($"{library.Id} {library.Books.Count}");
                 sb.AppendJoin(' ', library.Books);
+                sb.AppendLine();
             }
             writer.Write(sb);
             writer.Flush();
@@ -105,38 +106,36 @@ namespace Task1
                 Libraries = new List<LibraryAnswer>()
             };
             int j = days;
-            BitArray maskAlready = new BitArray(books, true);
+            BitArray maskAlready = new BitArray(books, false);
+            var libsSorted = new List<(int Key, int Value)>();
+            for (int i = 0; i < libraries; i++)
+            {
+                libsSorted.Add((i, libBooks[i].Sum()));
+            }
+
+            var sortedArray = libsSorted.OrderByDescending(x=> x.Value).ToArray();
+
+            var idx = 0;
             while (j > 0)
             {
-                var maxBooks = -1;
-                var maxId = -1;
-                BitArray maxMask = null;
 
-                for (int i = 0; i < libraries; i++)
-                {
-                    var copy = new BitArray(maskAlready);
-                    var maskCur = maskAlready.And(libBooks[i]);
-                    var val = maskCur.Sum();
-                    if (val > maxBooks)
-                    {
-                        maxBooks = val;
-                        maxId = i;
-                        maxMask = maskCur;
-                    }
-                }
+                var lib = sortedArray[idx++];
+//                var lib = libsSorted.Last();
+//                libsSorted.Remove(lib.Key);
 
                 var libraryAnswer = new LibraryAnswer
                 {
-                    Id = maxId,
+                    Id = lib.Key,
                     Books = new List<int>()
                 };
                 for (int i = 0; i < books; i++)
                 {
-                    if (maxMask[i])
+                    if (!maskAlready[i] && libBooks[lib.Key][i])
                         libraryAnswer.Books.Add(i);
                 }
                 result.Libraries.Add(libraryAnswer);
-                j -= 2;
+                maskAlready.Or(libBooks[lib.Key]);
+                j -= librariesSignups[lib.Key];
             }
             return result;
         }
