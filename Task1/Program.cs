@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +13,7 @@ namespace Task1
         public  static int libraries, books;
         public static int[] booksCost;
         public static BitArray[] libBooks;
+        public static int days;
 
         public static string fileName;
         //static IEnumerable<int> ParseLine(string line) => line.Split(' ').Select(int.Parse);
