@@ -11,6 +11,7 @@ namespace Task1
     class Program
     {
         public  static int libraries, books;
+        public static int[] booksCost;
         public static BitArray[] libBooks;
 
         public static string fileName;
