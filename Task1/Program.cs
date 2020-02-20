@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Enumeration;
 using System.Linq;
+using System.Text;
 using Common;
 
 namespace Task1
@@ -23,12 +24,7 @@ namespace Task1
 
         static void Main(string[] args)
         {
-            fileName = args.Any() ? args[0] : "";
-            if (!Path.IsPathFullyQualified(fileName))
-            {
-                fileName = Path.Combine(Environment.CurrentDirectory, fileName);
-            }
-            Read();
+            Read(args);
 
             var result = GetAnswer();
             
@@ -37,8 +33,14 @@ namespace Task1
             Output(result);
         }
 
-        static void Read()
+        static void Read(string[] args)
         {
+            fileName = args.Any() ? args[0] : "";
+            if (!Path.IsPathFullyQualified(fileName))
+            {
+                fileName = Path.Combine(Environment.CurrentDirectory, fileName);
+            }
+
             int[] ParseLine(string val) => val.Split(' ').Select(int.Parse).ToArray();
             using var reader = File.OpenText(fileName);
 
@@ -79,7 +81,20 @@ namespace Task1
             //    Console.WriteLine();
             //}
         }
-        static void Output(Answer result) { }
+
+        static void Output(Answer result)
+        {
+            var writer = File.CreateText($"{Path.GetFileNameWithoutExtension(fileName)}_out.txt");
+            var sb = new StringBuilder();
+            sb.AppendLine(result.Libraries.Count.ToString());
+            foreach (var library in result.Libraries)
+            {
+                sb.AppendLine($"{library.Id} {library.Books.Count}");
+                sb.AppendJoin(' ', library.Books);
+            }
+            writer.Write(sb);
+            writer.Flush();
+        }
 
         static Answer GetAnswer()
         {
