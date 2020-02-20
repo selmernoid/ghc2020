@@ -20,7 +20,7 @@ namespace Common
         public int BooksPerDay;
         public int[] Books;
 
-        private int[] DaysDistribution { }
+        //private int[] DaysDistribution { }
 
         public long LibraryValue
         {
@@ -35,18 +35,18 @@ namespace Common
             }
         }
 
-        public int[,] GetSplitedArrays(int[] array, int sizeOfEach)
-        {
-            var quantityOfColumns = array.Length / sizeOfEach;
-            int[,] result = new int[quantityOfColumns + (array.Length%sizeOfEach == 0 ? 0 : 1), sizeOfEach];
-            for (var i = 0; i < array.Length;)
-            {
-                for (int j = 0; j < sizeOfEach; j++, i++)
-                {
+        //public int[,] GetSplitedArrays(int[] array, int sizeOfEach)
+        //{
+        //    var quantityOfColumns = array.Length / sizeOfEach;
+        //    int[,] result = new int[quantityOfColumns + (array.Length%sizeOfEach == 0 ? 0 : 1), sizeOfEach];
+        //    for (var i = 0; i < array.Length;)
+        //    {
+        //        for (int j = 0; j < sizeOfEach; j++, i++)
+        //        {
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
     }
 
    
