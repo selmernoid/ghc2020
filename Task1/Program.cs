@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Enumeration;
 using System.Linq;
+using System.Text;
 using Common;
 
 namespace Task1
@@ -34,7 +35,7 @@ namespace Task1
             
             result = GetAnswerD();
 
-            Output(result);
+            Output(result, File.CreateText($"{Path.GetFileNameWithoutExtension(fileName)}_out.txt"));
         }
 
         static void Read()
@@ -79,7 +80,19 @@ namespace Task1
             //    Console.WriteLine();
             //}
         }
-        static void Output(Answer result) { }
+
+        static void Output(Answer result, StreamWriter writer)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(result.Libraries.Count.ToString());
+            foreach (var library in result.Libraries)
+            {
+                sb.AppendLine($"{library.Id} {library.Books.Count}");
+                sb.AppendJoin(' ', library.Books);
+            }
+            writer.Write(sb);
+            writer.Flush();
+        }
 
         static Answer GetAnswer()
         {
