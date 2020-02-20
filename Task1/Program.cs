@@ -91,13 +91,23 @@ namespace Task1
         {
             var writer = File.CreateText($"{Path.GetFileNameWithoutExtension(fileName)}_out.txt");
             var sb = new StringBuilder();
-            sb.AppendLine(result.Libraries.Count.ToString());
+            var librariesCount = result.Libraries.Count;
+            var librarySb = new StringBuilder();
             foreach (var library in result.Libraries)
             {
-                sb.AppendLine($"{library.Id} {library.Books.Count}");
-                sb.AppendJoin(' ', library.Books);
-                sb.AppendLine();
+                if (library.Books.Count != 0)
+                {
+                    librarySb.AppendLine($"{library.Id} {library.Books.Count}");
+                    librarySb.AppendJoin(' ', library.Books);
+                    librarySb.AppendLine();
+                }
+                else
+                {
+                    librariesCount--;
+                }
             }
+            sb.AppendLine(librariesCount.ToString());
+            sb.Append(librarySb);
             writer.Write(sb);
             writer.Flush();
         }
