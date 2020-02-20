@@ -11,7 +11,7 @@ namespace Common
 
         public OrderedList(IEnumerable<(int key, int value)> list)
         {
-            _list = list.OrderBy(x => x.value).ToList();
+            _list = list.OrderByDescending(x => x.value).ToList();
         }
 
 
@@ -19,17 +19,26 @@ namespace Common
         {
             for (int i = 0; i < _list.Count; i++)
             {
-                if (item.value <= _list[i].value)
+                if (item.value >= _list[i].value)
                 {
                     _list.Insert(i, item);
-                    break;
+                    return;
                 }
             }
+            _list.Add(item);
         }
 
-        public void Remove((int key, int value) value)
+        public void Remove(int key)
         {
-            _list.Remove(value);
+            for (int i = 0; i < _list.Count; i++)
+            {
+                var elem = _list[i];
+                if (elem.key == key)
+                {
+                    _list.Remove(elem);
+                    return;
+                }
+            }
         }
     }
 
