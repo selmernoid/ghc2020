@@ -32,45 +32,33 @@ namespace Task1
 
             var result = GetAnswer();
             
-            result = GetAnswerB();
-
-
-            //var libraryAnswer = new LibraryAnswer
-            //     {
-            //         Id = lib.Key,
-            //         Books = new List<int>()
-            //     };
-            //for (int i = 0; i < books; i++)
-            //{
-            //    if (libBooks[lib.Key][i])
-            //        libraryAnswer.Books.Add(i);
-            //}
+            result = GetAnswerC();
 
             result = GetAnswerD();
 
             Output(result);
         }
 
-        private static Answer GetAnswerB()
+        private static Answer GetAnswerC()
         {
             IEnumerable<KeyValuePair<int, LibrariesCost>> temp = libraryCostsGlobal.Where(x => x.Key <= days);
             var res = temp.FirstOrDefault(x => x.Value.Cost == temp.Max(y => y.Value.Cost));
-            return CreateAnswer(res.Value.libraryIds);
+            return CreateAnswer(res.Value.Libraries);
         }
 
-        private static Answer CreateAnswer(List<int> libraryIds)
+        private static Answer CreateAnswer(List<Library> libraries)
         {
 
             List<LibraryAnswer> libraryAnswers = new List<LibraryAnswer>();
 
-            foreach (var item in libraryIds)
+            foreach (var item in libraries)
             {
-                new LibraryAnswer()
+                libraryAnswers.Add(new LibraryAnswer()
                 {
-                    Id = item,
-                    Books = books[]
+                    Id = item.Id,
+                    Books = item.Books.ToList()
+                });
                 }
-            }
 
             return new Answer()
             {
