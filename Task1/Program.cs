@@ -24,22 +24,23 @@ namespace Task1
 
         static void Main(string[] args)
         {
-            fileName = args.Any() ? args[0] : "";
-            if (!Path.IsPathFullyQualified(fileName))
-            {
-                fileName = Path.Combine(Environment.CurrentDirectory, fileName);
-            }
-            Read();
+            Read(args);
 
             var result = GetAnswer();
             
             result = GetAnswerD();
 
-            Output(result, File.CreateText($"{Path.GetFileNameWithoutExtension(fileName)}_out.txt"));
+            Output(result);
         }
 
-        static void Read()
+        static void Read(string[] args)
         {
+            fileName = args.Any() ? args[0] : "";
+            if (!Path.IsPathFullyQualified(fileName))
+            {
+                fileName = Path.Combine(Environment.CurrentDirectory, fileName);
+            }
+
             int[] ParseLine(string val) => val.Split(' ').Select(int.Parse).ToArray();
             using var reader = File.OpenText(fileName);
 
@@ -81,8 +82,9 @@ namespace Task1
             //}
         }
 
-        static void Output(Answer result, StreamWriter writer)
+        static void Output(Answer result)
         {
+            var writer = File.CreateText($"{Path.GetFileNameWithoutExtension(fileName)}_out.txt");
             var sb = new StringBuilder();
             sb.AppendLine(result.Libraries.Count.ToString());
             foreach (var library in result.Libraries)
