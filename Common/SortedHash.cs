@@ -9,9 +9,11 @@ namespace Common
     {
         private List<(int key, int value)> _list;
 
-        public OrderedList(IEnumerable<(int key, int value)> list)
+        public OrderedList(IEnumerable<(int key, int value)> list = null)
         {
-            _list = list.OrderByDescending(x => x.value).ToList();
+            _list = 
+                list == null ? new List<(int key, int value)>():
+                 list.OrderByDescending(x => x.value).ToList();
         }
 
 
@@ -28,6 +30,8 @@ namespace Common
             _list.Add(item);
         }
 
+        public (int Key,int Value) First() => _list.First();
+        public void RemoveAt(int idx) { _list.RemoveAt(idx);}
         public void Remove(int key)
         {
             for (int i = 0; i < _list.Count; i++)

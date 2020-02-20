@@ -116,14 +116,15 @@ namespace Task1
             BitArray maskAlready = new BitArray(books, false);
 //            var libsSorted2 = new SortedList<L_V,>();
 //            var libsSorted = new SortedList<int, int>();
-            var libsSorted = new List<(int Key, int Value)>();
+            var libsSorted = new OrderedList();
+//            var libsSorted = new List<(int Key, int Value)>();
             for (int i = 0; i < libraries; i++)
             {
                 libsSorted.Add(( i, libBooks[i].Sum()));
 //                libsSorted.Add(libBooks[i].Sum(), i);
             }
 
-            var rb = libsSorted.GroupBy(x => x.Value).OrderByDescending(x=> x.Key);
+//            var rb = libsSorted.GroupBy(x => x.Value).OrderByDescending(x=> x.Key);
 //            var sortedArray = libsSorted.OrderByDescending(x=> x.Value).ToArray();
 
             var idx = 0;
@@ -132,7 +133,7 @@ namespace Task1
 
 //                var lib = sortedArray[idx++];
                 var lib = libsSorted.First();
-                libsSorted.Remove(lib.Key);
+                libsSorted.RemoveAt(0);
 
                 var libraryAnswer = new LibraryAnswer
                 {
