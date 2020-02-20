@@ -35,7 +35,7 @@ namespace Task1
 
         static void Read(string[] args)
         {
-            fileName = args.Any() ? args[0] : "";
+            fileName = args.Any() ? args[0] : "d_tough_choices.txt";
             if (!Path.IsPathFullyQualified(fileName))
             {
                 fileName = Path.Combine(Environment.CurrentDirectory, fileName);
@@ -109,21 +109,25 @@ namespace Task1
             };
             int j = days;
             BitArray maskAlready = new BitArray(books, false);
+//            var libsSorted2 = new SortedList<L_V,>();
+//            var libsSorted = new SortedList<int, int>();
             var libsSorted = new List<(int Key, int Value)>();
             for (int i = 0; i < libraries; i++)
             {
-                libsSorted.Add((i, libBooks[i].Sum()));
+                libsSorted.Add(( i, libBooks[i].Sum()));
+//                libsSorted.Add(libBooks[i].Sum(), i);
             }
 
-            var sortedArray = libsSorted.OrderByDescending(x=> x.Value).ToArray();
+            var rb = libsSorted.GroupBy(x => x.Value).OrderByDescending(x=> x.Key);
+//            var sortedArray = libsSorted.OrderByDescending(x=> x.Value).ToArray();
 
             var idx = 0;
             while (j > 0)
             {
 
-                var lib = sortedArray[idx++];
-//                var lib = libsSorted.Last();
-//                libsSorted.Remove(lib.Key);
+//                var lib = sortedArray[idx++];
+                var lib = rb.GetEnumerator() libsSorted.Last();
+                libsSorted.RemoveAt(libsSorted.Count -1);
 
                 var libraryAnswer = new LibraryAnswer
                 {
@@ -143,7 +147,12 @@ namespace Task1
         }
     }
 
-
+    public class L_V
+    {
+        public int LibId { get; set; }
+        public int Value { get; set; }
+//        , Value;
+    }
     public static class Extensions {
         static unsafe int ConvertBoolUnsafe(bool t) => *(byte*)(&t);
 
